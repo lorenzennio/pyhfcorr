@@ -1,6 +1,6 @@
 import numpy as np
 from copy import deepcopy
-import modifiers
+from pyhfcorr import modifiers
 
 def _pca(corr, return_rot=False):
     """Principal Component analysis, moving to a space where the covariance matrix is diagonal
