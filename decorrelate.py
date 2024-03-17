@@ -1,5 +1,6 @@
 import numpy as np
 from copy import deepcopy
+import modifiers
 
 def _pca(corr, return_rot=False):
     """Principal Component analysis, moving to a space where the covariance matrix is diagonal
@@ -29,21 +30,21 @@ def validate(corr):
         
 def get_coords(var_name, spec):
     coords = []
-    for ich, ch in enumerate(spec):
-        for isa, sa in enumerate(ch["samples"]):
+    for channel_index, ch in enumerate(spec):
+        for sample_index, sa in enumerate(ch["samples"]):
             for imo, mo in enumerate(sa["modifiers"]):
                 if mo["name"] == var_name:
-                    coords.append((ich, isa, imo))
+                    coords.append((channel_index, sample_index, imo))
     return coords
     
-def group_coords(coords, icoords):
+def group_coords(coords, coords_index):
     # group coords by channel and sample, but remember index
     group_coords = {}
-    for c, i in zip(coords, icoords):
+    for c, i in zip(coords, coords_index):
         if (c[0], c[1]) not in group_coords.keys():
-            group_coords[(c[0], c[1])] = {"uv_ind": [], "mod_ind": []}
-        group_coords[(c[0], c[1])]["uv_ind" ].append(i)
-        group_coords[(c[0], c[1])]["mod_ind"].append(c[2])
+            group_coords[(c[0], c[1])] = {"uv_index": [], "modifier_index": []}
+        group_coords[(c[0], c[1])]["uv_index" ].append(i)
+        group_coords[(c[0], c[1])]["modifier_index"].append(c[2])
     return group_coords
 
 def decorrelate(spec):
@@ -61,55 +62,44 @@ def decorrelate(spec):
             
             # get channel, sample and modifier index for each variable
             coords = []
-            icoords = []
+            coords_index = []
             for ic, var in enumerate(corr["vars"]):
                 c = get_coords(var, channels)
                 coords += get_coords(var, channels)
-                icoords += [ic for _ in c]
+                coords_index += [ic for _ in c]
                 
-            coords_grouped = group_coords(coords, icoords)
+            grouped_coords = group_coords(coords, coords_index)
             
-            mod_type = [channels[c[0]]["samples"][c[1]]["modifiers"][c[2]]["type"] for c in coords]
-            mod_type = np.unique(mod_type)
+            modifier_type = [channels[c[0]]["samples"][c[1]]["modifiers"][c[2]]["type"] for c in coords]
+            modifier_type = np.unique(modifier_type)
             
-            #check if all modifiers have the same type
-            if len(mod_type) != 1:
+            # check if all modifiers have the same type
+            if len(modifier_type) != 1:
                 raise ValueError("Correlated modifiers must have the same type.")
-            mod_type = mod_type[0]
+            modifier_type = modifier_type[0]
             
             # compute shifts for each independent eigenvector
-            for i_uv, uv in enumerate(uvec.T):
-                for (ich, isa), mods in coords_grouped.items():
-                    uv_ind  = mods["uv_ind"]
-                    mod_ind = mods["mod_ind"]
+            for uv_ind, uv in enumerate(uvec.T):
+                for (channel_index, sample_index), mods in grouped_coords.items():
+                    uv_index  = mods["uv_index"]
+                    modifier_index = mods["modifier_index"]
                     
-                    nom = np.array(channels[ich]["samples"][isa]["data"])
-                    
-                    lo_diffs = np.array([np.subtract(channels[ich]["samples"][isa]["modifiers"][imo]["data"]["lo_data"], nom) for imo in mod_ind])
-                    hi_diffs = np.array([np.subtract(channels[ich]["samples"][isa]["modifiers"][imo]["data"]["hi_data"], nom) for imo in mod_ind])
-                    
-                    lo_shift = np.sum(uv[uv_ind, np.newaxis] * lo_diffs, axis=0)
-                    hi_shift = np.sum(uv[uv_ind, np.newaxis] * hi_diffs, axis=0)
+                    nominal = np.array(channels[channel_index]["samples"][sample_index]["data"])
+                    modifier_data = [
+                        channels[channel_index]["samples"][sample_index]["modifiers"][imo]["data"] 
+                        for imo in modifier_index]
+                    uv_subset = uv[uv_index]
 
-                    new_lo = nom + lo_shift
-                    new_hi = nom + hi_shift
+                    new_mod = getattr(modifiers, modifier_type)(modifier_data, nominal, uv_subset)
+                    new_mod["name"] = corr["name"] + f"[{str(uv_ind)}]"
                     
-                    channels[ich]["samples"][isa]["modifiers"].append(
-                        {
-                            "name": corr["name"] + f"[{str(i_uv)}]",
-                            "type": mod_type,
-                            "data": {
-                                "lo_data": list(new_lo),
-                                "hi_data": list(new_hi)
-                            }
-                        }
-                    )
+                    channels[channel_index]["samples"][sample_index]["modifiers"].append(new_mod)
                     
-            for (ich, isa), _ in coords_grouped.items():
+            for (channel_index, sample_index) in grouped_coords.keys():
                 new_modifiers = []
-                for m in channels[ich]["samples"][isa]["modifiers"]:
+                for m in channels[channel_index]["samples"][sample_index]["modifiers"]:
                     if m["name"] not in corr["vars"]:
                         new_modifiers.append(m)
-                channels[ich]["samples"][isa]["modifiers"] = new_modifiers
+                channels[channel_index]["samples"][sample_index]["modifiers"] = new_modifiers
         
     return {"channels": channels}
