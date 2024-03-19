@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 
 def shapesys(modifier_data, nominal, uv_subset):
     diffs = np.array(modifier_data)
@@ -64,12 +65,3 @@ def staterror(modifier_data, nominal, uv_subset):
             "type": "staterror",
             "data": shift
         }
-
-def lumi(modifier_data, nominal, uv_subset):
-    pass
-
-def normfactor(modifier_data, nominal, uv_subset):
-    pass
-
-def shapefactor(modifier_data, nominal, uv_subset):
-    pass

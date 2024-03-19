@@ -79,6 +79,10 @@ def decorrelate(spec):
                 raise ValueError("Correlated modifiers must have the same type.")
             modifier_type = modifier_type[0]
             
+            if modifier_type in ["lumi", "normfactor", "shapefactor"]:
+                warnings.warn(f"Modifiers without data can only be full (de)correlated and should be treated with pyhf directly.")
+                return {"channels": channels}
+            
             # compute shifts for each independent eigenvector
             for uv_ind, uv in enumerate(uvec.T):
                 for (channel_index, sample_index), mods in grouped_coords.items():
