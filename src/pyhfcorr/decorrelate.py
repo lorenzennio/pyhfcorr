@@ -12,7 +12,7 @@ def _pca(corr, return_rot=False):
     Returns:
         array: matrix of column wise error vectors (eigenvectors * sqrt(eigenvalues); sqrt(eigenvalues) = std)
     """
-    svd = np.linalg.svd(corr)
+    svd = np.linalg.svd(corr, hermitian=True)
     uvec = svd[0] @ np.sqrt(np.diag(svd[1]))
     if return_rot:
         return uvec, svd[0]

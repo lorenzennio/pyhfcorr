@@ -50,13 +50,13 @@ def test_singlesample():
     initial_parameters = new_model.config.suggested_init()
     initial_parameters[1] = 100.
     
-    initial_parameters[0] = 1.
+    initial_parameters[0] = -1.
     assert pytest.approx(new_model.expected_data(initial_parameters, include_auxdata=False), 1e-5) == hist2-hist1-hist2
     
     initial_parameters[0] = 0.
     assert pytest.approx(new_model.expected_data(initial_parameters, include_auxdata=False), 1e-5) == hist2
     
-    initial_parameters[0] = -1.
+    initial_parameters[0] = 1.
     assert pytest.approx(new_model.expected_data(initial_parameters, include_auxdata=False), 1e-5) == hist2+hist1+hist2
     
 def test_doublesample():
@@ -122,7 +122,7 @@ def test_doublesample():
     initial_parameters = new_model.config.suggested_init()
     initial_parameters[1] = 100.
     
-    initial_parameters[0] = 1.
+    initial_parameters[0] = -1.
     expected_data = new_model.expected_data(initial_parameters, include_auxdata=False)
     assert pytest.approx(expected_data, 1e-5) == hist1 - hist1 - hist2 + hist2 - hist1
     
@@ -131,7 +131,7 @@ def test_doublesample():
     print(expected_data)
     assert pytest.approx(expected_data, 1e-5) == hist1 + hist2
     
-    initial_parameters[0] = -1.
+    initial_parameters[0] = 1.
     expected_data = new_model.expected_data(initial_parameters, include_auxdata=False)
     print(expected_data)
     assert pytest.approx(expected_data, 1e-5) == hist1 + hist1 + hist2 + hist2 + hist1
