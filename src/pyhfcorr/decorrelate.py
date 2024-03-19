@@ -80,7 +80,7 @@ def decorrelate(spec):
             modifier_type = modifier_type[0]
             
             if modifier_type in ["lumi", "normfactor", "shapefactor"]:
-                warnings.warn(f"Modifiers without data can only be full (de)correlated and should be treated with pyhf directly.")
+                warnings.warn("Modifiers without data can only be full (de)correlated and should be treated with pyhf directly.")
                 return {"channels": channels}
             
             # compute shifts for each independent eigenvector
