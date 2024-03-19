@@ -1,5 +1,6 @@
 import numpy as np
 from copy import deepcopy
+import warnings
 from pyhfcorr import modifiers
 
 def _pca(corr, return_rot=False):
@@ -91,6 +92,12 @@ def decorrelate(spec):
                     uv_subset = uv[uv_index]
 
                     new_mod = getattr(modifiers, modifier_type)(modifier_data, nominal, uv_subset)
+                    
+                    if new_mod is None:
+                        name = corr["name"] + f"[{str(uv_ind)}]"
+                        warnings.warn(f"Modifier {name} is redundant and is not added.")
+                        continue
+                    
                     new_mod["name"] = corr["name"] + f"[{str(uv_ind)}]"
                     
                     channels[channel_index]["samples"][sample_index]["modifiers"].append(new_mod)

@@ -29,7 +29,22 @@ def histosys(modifier_data, nominal, uv_subset):
         }
     
 def normsys(modifier_data, nominal, uv_subset):
-    pass
+    lo_diffs = np.array([m["lo"] for m in modifier_data])
+    hi_diffs = np.array([m["hi"] for m in modifier_data])
+    
+    new_lo = np.sum(uv_subset * lo_diffs)
+    new_hi = np.sum(uv_subset * hi_diffs)
+    
+    if new_lo == new_hi:
+        return None
+        
+    return {
+            "type": "normsys",
+            "data": {
+                "lo": new_lo,
+                "hi": new_hi
+            }
+        }
 
 def staterror(modifier_data, nominal, uv_subset):
     pass
