@@ -53,7 +53,17 @@ def normsys(modifier_data, nominal, uv_subset):
         }
 
 def staterror(modifier_data, nominal, uv_subset):
-    pass
+    diffs = np.array(modifier_data)
+    
+    shift = np.sqrt(np.sum((uv_subset[:, np.newaxis] * diffs)**2, axis=0))
+    
+    if not np.any(shift):
+        return None
+    
+    return {
+            "type": "staterror",
+            "data": shift
+        }
 
 def lumi(modifier_data, nominal, uv_subset):
     pass
