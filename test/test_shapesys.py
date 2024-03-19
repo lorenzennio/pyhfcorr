@@ -39,9 +39,11 @@ def test_singlesample():
     ]}
     
     new_spec = decorrelate.decorrelate(spec)
+    
+    pytest.warns(UserWarning, decorrelate.decorrelate, spec)
+    
     new_model = pyhf.Model(new_spec)
     
-    auxdata = new_model.config.auxdata
-    print(auxdata)
     
+    auxdata = new_model.config.auxdata
     assert pytest.approx(auxdata[:10], 1e-5) == list((hist2 / (hist1+hist2)) ** 2)

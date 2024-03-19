@@ -54,9 +54,9 @@ def test_doublesample():
             "modifiers": [
                 {"name": "mu", "type": "normfactor", "data" : None},
                 {
-                    "name": "u1",                        # same name
+                    "name": "u1",
                     "type": "staterror",
-                    "data" : list(hist1)                       # absolute yield uncertainties in each bin (Poisson error)
+                    "data" : list(hist1)
                 }
             ],
         },
@@ -64,11 +64,10 @@ def test_doublesample():
             "name": "sample2",
             "data": list(hist2),
             "modifiers": [
-                # {"name": "mu2", "type": "normfactor", "data" : None},
                 {
-                    "name": "u2",                        # same name
+                    "name": "u2",
                     "type": "staterror",
-                    "data" : list(hist2)                       # absolute yield uncertainties in each bin (Poisson error)
+                    "data" : list(hist2)
                 }
             ],
         },
@@ -85,9 +84,11 @@ def test_doublesample():
     ]}
 
     new_spec = decorrelate.decorrelate(spec)
+    
+    pytest.warns(UserWarning, decorrelate.decorrelate, spec)
+    
     new_model = pyhf.Model(new_spec)
     
     width = new_model.config.param_set("corr[0]").width()
-    
     assert pytest.approx(width, 1e-5) == list(np.sqrt(hist1**2 + hist2**2)/(hist1 + hist2))
     

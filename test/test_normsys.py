@@ -98,6 +98,9 @@ def test_doublesample():
 
     
     new_spec = decorrelate.decorrelate(spec)
+    
+    pytest.warns(UserWarning, decorrelate.decorrelate, spec)
+    
     new_model = pyhf.Model(new_spec)
     
     initial_parameters = new_model.config.suggested_init()
