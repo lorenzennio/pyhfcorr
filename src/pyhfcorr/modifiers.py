@@ -1,7 +1,14 @@
 import numpy as np
 
 def shapesys(modifier_data, nominal, uv_subset):
-    pass
+    diffs = np.array(modifier_data)
+    
+    shift = np.sum(uv_subset[:, np.newaxis] * diffs, axis=0)
+    
+    return {
+            "type": "shapesys",
+            "data": shift
+        }
 
 def histosys(modifier_data, nominal, uv_subset):
     lo_diffs = np.array([np.subtract(m["lo_data"], nominal) for m in modifier_data])
