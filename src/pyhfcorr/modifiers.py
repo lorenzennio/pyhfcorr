@@ -5,6 +5,9 @@ def shapesys(modifier_data, nominal, uv_subset):
     
     shift = np.sum(uv_subset[:, np.newaxis] * diffs, axis=0)
     
+    if not np.any(shift):
+        return None
+    
     return {
             "type": "shapesys",
             "data": shift
