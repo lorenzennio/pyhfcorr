@@ -17,14 +17,17 @@ def histosys(modifier_data, nominal, uv_subset):
     lo_shift = np.sum(uv_subset[:, np.newaxis] * lo_diffs, axis=0)
     hi_shift = np.sum(uv_subset[:, np.newaxis] * hi_diffs, axis=0)
 
-    new_lo = nominal + lo_shift
-    new_hi = nominal + hi_shift
+    new_lo = (nominal + lo_shift).tolist()
+    new_hi = (nominal + hi_shift).tolist()
+    
+    if new_lo == new_hi:
+        return None
     
     return {
             "type": "histosys",
             "data": {
-                "lo_data": list(new_lo),
-                "hi_data": list(new_hi)
+                "lo_data": new_lo,
+                "hi_data": new_hi
             }
         }
     

@@ -48,7 +48,6 @@ def test_singlesample():
     new_model = pyhf.Model(new_spec)
     
     initial_parameters = new_model.config.suggested_init()
-    initial_parameters[1] = 100.
     
     initial_parameters[0] = -1.
     assert pytest.approx(new_model.expected_data(initial_parameters, include_auxdata=False), 1e-5) == hist2-hist1-hist2
@@ -117,10 +116,7 @@ def test_doublesample():
     new_spec = decorrelate.decorrelate(spec)
     new_model = pyhf.Model(new_spec)
     
-    print(new_spec)
-    
     initial_parameters = new_model.config.suggested_init()
-    initial_parameters[1] = 100.
     
     initial_parameters[0] = -1.
     expected_data = new_model.expected_data(initial_parameters, include_auxdata=False)
