@@ -24,5 +24,5 @@ spec = {
 By pre-processing the model specification, we obtain a new specification, which is now pyhf compatible and has the correlation correctly implemented:
 
 ```python
-new_spec = decorrelate.decorrelate(spec)
+new_spec = pyhfcorr.decorrelate.decorrelate(spec)
 ```
