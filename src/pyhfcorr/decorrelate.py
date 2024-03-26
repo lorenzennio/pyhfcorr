@@ -50,7 +50,7 @@ def group_coords(coords, coords_index):
 
 def decorrelate(spec):
     if "correlations" in spec.keys():
-        print("correlation found")
+        print("Processing correlations ...")
         
         validate(spec["correlations"])
         
@@ -80,7 +80,7 @@ def decorrelate(spec):
             modifier_type = modifier_type[0]
             
             if modifier_type in ["lumi", "normfactor", "shapefactor"]:
-                warnings.warn("Modifiers without data can only be full (de)correlated and should be treated with pyhf directly.")
+                warnings.warn("Modifiers without data can only be fully (de)correlated and should be treated with pyhf directly.")
                 return {"channels": channels}
             
             # compute shifts for each independent eigenvector
