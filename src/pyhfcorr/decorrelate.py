@@ -19,14 +19,21 @@ def _pca(corr, return_rot=False):
         return uvec, svd[0]
     return uvec
 
-def validate(corr):
-    for c in corr:
-        shape = np.shape(c["corr"])
+def validate(correlations):
+    for corr in correlations:
+        c = np.array(corr["corr"])
+        shape = np.shape(c)
         if len(shape) != 2:
             raise ValueError("Correlation matrix must be 2-dimensional.")
         if shape[0] != shape[1]:
             raise ValueError("Correlation matrix must be square.")
-        if len(c["vars"]) != len(c["corr"]):
+        if not np.all(np.diag(c) == 1):
+            raise ValueError("Diagonals of correlation matrix must be 1.")
+        if not np.all(abs(c) <= 1):
+            raise ValueError("Correlation matrix must have values between -1 and 1.")
+        if not np.all(c.T == c):
+            raise ValueError("Correlation matrix must be symmetric.")
+        if len(corr["vars"]) != len(corr["corr"]):
             raise ValueError("Number of variables does not match dimension of correlation matrix")
         
 def get_coords(var_name, spec):
