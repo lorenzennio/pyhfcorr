@@ -1,5 +1,4 @@
 import numpy as np
-import warnings
 
 def shapesys(modifier_data, nominal, uv_subset):
     diffs = np.array(modifier_data)

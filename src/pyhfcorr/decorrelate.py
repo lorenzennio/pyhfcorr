@@ -20,6 +20,14 @@ def pca(corr, return_rot=False):
     return uvec
 
 def validate(correlations):
+    """Validate the correlation matrix and variables
+
+    Args:
+        correlations (dict): Correlation entries for pyhf model
+
+    Raises:
+        ValueError: If correlation martrix invalid or other inconsistencies occur
+    """
     for corr in correlations:
         c = np.array(corr["corr"])
         shape = np.shape(c)
@@ -37,6 +45,15 @@ def validate(correlations):
             raise ValueError("Number of variables does not match dimension of correlation matrix")
         
 def get_coords(var_name, spec):
+    """Get the coordinates of a variable in the specification (channel, sample, modifier)
+
+    Args:
+        var_name (string): modifier name
+        spec (dict): pyhf model specification
+
+    Returns:
+        array: list of cooringates [(channel, sample, modifier), ...] for given modifier
+    """
     coords = []
     for channel_index, ch in enumerate(spec):
         for sample_index, sa in enumerate(ch["samples"]):
@@ -46,7 +63,15 @@ def get_coords(var_name, spec):
     return coords
     
 def group_coords(coords, coords_index):
-    # group coords by channel and sample, but remember index
+    """Group coordinates by channel and sample, but remember modifier and uvec index
+
+    Args:
+        coords (array): list of coordinates [(channel, sample, modifier), ...]
+        coords_index (array): coordinate index
+
+    Returns:
+        dict: a dictionary of grouped corrdinates 
+    """
     group_coords = {}
     for c, i in zip(coords, coords_index):
         if (c[0], c[1]) not in group_coords.keys():
@@ -56,6 +81,14 @@ def group_coords(coords, coords_index):
     return group_coords
 
 def decorrelate(spec):
+    """A function to decorrelate modifiers in a pyhf model.
+
+    Args:
+        spec (dict): pyhf model specification, including correlations entry
+
+    Returns:
+        dict: decorrelated pyhf model specification
+    """
     if "correlations" in spec.keys():
         print("Processing correlations ...")
         
