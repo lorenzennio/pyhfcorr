@@ -26,3 +26,15 @@ By pre-processing the model specification, we obtain a new specification, which 
 ```python
 new_spec = pyhfcorr.decorrelate.decorrelate(spec)
 ```
+
+## Principal component analysis
+
+We can decompose a correlation matrix $C$ as
+
+$$ C = U S^2 U^H = USSU^H = (US)(US)^H,$$
+
+where $U$ is a unitary transformation matrix, $UU^H=1$ and $S$ is the diagonal matrix of standard deviations, $S=S^H$.
+
+The geometrical interpretation of this is, that by applying the transformation $(US)^{-1}$ to correlated data results in an uncorrelated data-set with unity standard deviation.
+
+The rotation $U^{-1} = U^H$ rotates points to a new coordinate system, where correlations between the dimensions vanish. In this rotated coordinate system, $S^{-1}$ scales the dimensions accordingly.
