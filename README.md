@@ -38,3 +38,7 @@ where $U$ is a unitary transformation matrix, $UU^H=1$ and $S$ is the diagonal m
 The geometrical interpretation of this is, that by applying the transformation $(US)^{-1}$ to correlated data results in an uncorrelated data-set with unity standard deviation.
 
 The rotation $U^{-1} = U^H$ rotates points to a new coordinate system, where correlations between the dimensions vanish. In this rotated coordinate system, $S^{-1}$ scales the dimensions accordingly.
+
+An illustration for a 2-dimensional random multivariate dataset $x$ with correlation coefficient $\rho=0.8$ is shown here:
+
+![pca illustration](./pca.png)
