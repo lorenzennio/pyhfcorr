@@ -1,1 +1,1 @@
-from . import decorrelate
+from pyhfcorr.decorrelate import *

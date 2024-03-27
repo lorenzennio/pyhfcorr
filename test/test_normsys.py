@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import pyhf
-from pyhfcorr import decorrelate
+import pyhfcorr
 
 hist1 = np.array([1.5, 3., 6., 7.5, 6.3, 6.6, 5.5, 2.5, 3. , 1.5])
 hist2 = np.array([3. , 6., 9., 12., 15., 9. , 6., 3. , 3.3, 2.15])
@@ -38,7 +38,7 @@ def test_singlesample():
         }
     ]}
     
-    new_spec = decorrelate.decorrelate(spec)
+    new_spec = pyhfcorr.decorrelate(spec)
     new_model = pyhf.Model(new_spec)
     
     initial_parameters = new_model.config.suggested_init()
@@ -97,9 +97,9 @@ def test_doublesample():
         ]}
 
     
-    new_spec = decorrelate.decorrelate(spec)
+    new_spec = pyhfcorr.decorrelate(spec)
     
-    pytest.warns(UserWarning, decorrelate.decorrelate, spec)
+    pytest.warns(UserWarning, pyhfcorr.decorrelate, spec)
     
     new_model = pyhf.Model(new_spec)
     

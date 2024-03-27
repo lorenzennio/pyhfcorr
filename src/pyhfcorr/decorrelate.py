@@ -3,7 +3,7 @@ from copy import deepcopy
 import warnings
 from pyhfcorr import modifiers
 
-def _pca(corr, return_rot=False):
+def pca(corr, return_rot=False):
     """Principal Component analysis, moving to a space where the covariance matrix is diagonal
     https://www.cs.cmu.edu/~elaw/papers/pca.pdf
 
@@ -66,7 +66,7 @@ def decorrelate(spec):
         for corr in spec["correlations"]:
             
             # compute decorrelation 
-            uvec = _pca(corr["corr"])
+            uvec = pca(corr["corr"])
             
             # get channel, sample and modifier index for each variable
             coords = []

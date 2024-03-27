@@ -2,7 +2,7 @@ import pytest
 import warnings
 import numpy as np
 import pyhf
-from pyhfcorr import decorrelate
+import pyhfcorr
 
 hist1 = np.array([1.5, 3., 6., 7.5, 6.3, 6.6, 5.5, 2.5, 3. , 1.5])
 
@@ -38,8 +38,8 @@ def test_singlesample():
         }
     ]}
 
-    new_spec = decorrelate.decorrelate(spec)
+    new_spec = pyhfcorr.decorrelate(spec)
     
-    pytest.warns(UserWarning, decorrelate.decorrelate, spec)
+    pytest.warns(UserWarning, pyhfcorr.decorrelate, spec)
     
     new_spec == {"channels" : [{"name" : "singlechannel", "samples" : samples}]}
