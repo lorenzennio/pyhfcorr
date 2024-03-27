@@ -1,4 +1,5 @@
-# pyhfcorr -- treating correlated uncertainties with pyhf
+# pyhfcorr 
+## Treating correlated uncertainties with pyhf
 
 [`pyhf`](https://pyhf.readthedocs.io) is based on the [`HistFactory`](https://cds.cern.ch/record/1456844/files/CERN-OPEN-2012-016.pdf) statistical model. This is a very general tool for statistical inference of binned data.
 
