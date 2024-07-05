@@ -3,9 +3,9 @@ from copy import deepcopy
 import warnings
 from pyhfcorr import modifiers
 
-def pca(corr, return_rot=False):
-    """Principal Component analysis, moving to a space where the covariance matrix is diagonal
-    https://www.cs.cmu.edu/~elaw/papers/pca.pdf
+def svd(corr, return_rot=False):
+    """Singular value decomposition, moving to a space where the covariance matrix is diagonal
+    https://www.cs.cmu.edu/~elaw/papers/svd.pdf
 
     Args:
         cov (array): Correlation matrix
@@ -99,7 +99,7 @@ def decorrelate(spec):
         for corr in spec["correlations"]:
             
             # compute decorrelation 
-            uvec = pca(corr["corr"])
+            uvec = svd(corr["corr"])
             
             # get channel, sample and modifier index for each variable
             coords = []

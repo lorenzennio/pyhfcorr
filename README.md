@@ -5,7 +5,7 @@
 
 One feature that is not included in [`pyhf`](https://pyhf.readthedocs.io) is the correct treatment of arbitrarily correlated uncertainties. The current implementation features only fully (de)correlated uncertainties.
 
-The use of this package is to add the option for arbitrarily correlated uncertainties, by a simple pre-processing step of the [pyhf](https://pyhf.readthedocs.io) model. The mathematical background used is simple [principal component analysis (PCA)](https://www.cs.cmu.edu/~elaw/papers/pca.pdf) (also see below).
+The use of this package is to add the option for arbitrarily correlated uncertainties, by a simple pre-processing step of the [pyhf](https://pyhf.readthedocs.io) model. The mathematical background used is simple [singular value decomposition (SVD)](https://www.cs.cmu.edu/~elaw/papers/pca.pdf) (also see below).
 
 To account for correlations between parameters, one simply adds a `correlation` field to the [`pyhf`](https://pyhf.readthedocs.io) model. Here we specify a `name`, which will be the new modifier name, the correlated variables `vars`, and the correlation matrix `corr`:
 
@@ -28,7 +28,7 @@ By pre-processing the model specification, we obtain a new specification, which 
 new_spec = pyhfcorr.decorrelate.decorrelate(spec)
 ```
 
-## Principal component analysis
+## Singular value decomposition
 
 We can decompose a correlation matrix $C$ as
 
@@ -42,4 +42,4 @@ The rotation $U^{-1} = U^H$ rotates points to a new coordinate system, where cor
 
 An illustration for a 2-dimensional random multivariate dataset $x$ with correlation coefficient $\rho=0.8$ is shown here:
 
-![pca illustration](./pca.png)
+![pca illustration](./svd.svg)
