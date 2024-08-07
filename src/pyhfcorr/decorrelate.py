@@ -124,27 +124,33 @@ def decorrelate(spec):
                 return {"channels": channels}
             
             # compute shifts for each independent eigenvector
+            
+            truncate = np.inf
+            if 'truncate' in corr.keys():
+                truncate = int(corr['truncate'])
+            
             for uv_ind, uv in enumerate(uvec.T):
-                for (channel_index, sample_index), mods in grouped_coords.items():
-                    uv_index  = mods["uv_index"]
-                    modifier_index = mods["modifier_index"]
-                    
-                    nominal = np.array(channels[channel_index]["samples"][sample_index]["data"])
-                    modifier_data = [
-                        channels[channel_index]["samples"][sample_index]["modifiers"][imo]["data"] 
-                        for imo in modifier_index]
-                    uv_subset = uv[uv_index]
+                if uv_ind < truncate:
+                    for (channel_index, sample_index), mods in grouped_coords.items():
+                        uv_index  = mods["uv_index"]
+                        modifier_index = mods["modifier_index"]
+                        
+                        nominal = np.array(channels[channel_index]["samples"][sample_index]["data"])
+                        modifier_data = [
+                            channels[channel_index]["samples"][sample_index]["modifiers"][imo]["data"] 
+                            for imo in modifier_index]
+                        uv_subset = uv[uv_index]
 
-                    new_mod = getattr(modifiers, modifier_type)(modifier_data, nominal, uv_subset)
-                    
-                    if new_mod is None:
-                        name = corr["name"] + f"[{str(uv_ind)}]"
-                        warnings.warn(f"Modifier {name} is redundant and is not added.")
-                        continue
-                    
-                    new_mod["name"] = corr["name"] + f"[{str(uv_ind)}]"
-                    
-                    channels[channel_index]["samples"][sample_index]["modifiers"].append(new_mod)
+                        new_mod = getattr(modifiers, modifier_type)(modifier_data, nominal, uv_subset)
+                        
+                        if new_mod is None:
+                            name = corr["name"] + f"[{str(uv_ind)}]"
+                            warnings.warn(f"Modifier {name} is redundant and is not added.")
+                            continue
+                        
+                        new_mod["name"] = corr["name"] + f"[{str(uv_ind)}]"
+                        
+                        channels[channel_index]["samples"][sample_index]["modifiers"].append(new_mod)
                     
             for (channel_index, sample_index) in grouped_coords.keys():
                 new_modifiers = []
