@@ -18,5 +18,8 @@ jobs:
       - name: List installed Python packages
         run: python -m pip list
 
+      - name: Run pre-commit
+        run: pre-commit run --all-files
+
       - name: Run tests with pytest
         run: pytest
