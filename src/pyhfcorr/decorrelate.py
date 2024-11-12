@@ -3,6 +3,8 @@ from copy import deepcopy
 import warnings
 from pyhfcorr import modifiers
 
+warnings.simplefilter("always", UserWarning)
+
 def svd(corr, return_rot=False):
     """Singular value decomposition, moving to a space where the covariance matrix is diagonal
     https://www.cs.cmu.edu/~elaw/papers/svd.pdf
