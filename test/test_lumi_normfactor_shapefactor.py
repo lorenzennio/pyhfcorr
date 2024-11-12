@@ -24,12 +24,12 @@ def test_singlesample():
                     "data": None
                 }
         ],
-            
+
         },
     ]
 
     spec = {
-    "channels" : [{"name" : "singlechannel", "samples" : samples}], 
+    "channels" : [{"name" : "singlechannel", "samples" : samples}],
     "correlations": [
         {
             "name": "corr",
@@ -39,7 +39,7 @@ def test_singlesample():
     ]}
 
     new_spec = pyhfcorr.decorrelate(spec)
-    
+
     pytest.warns(UserWarning, pyhfcorr.decorrelate, spec)
-    
+
     new_spec == {"channels" : [{"name" : "singlechannel", "samples" : samples}]}

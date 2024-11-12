@@ -24,12 +24,12 @@ def test_singlesample():
                     "data": list(hist2)
                 }
             ],
-            
+
         },
     ]
 
     spec = {
-    "channels" : [{"name" : "singlechannel", "samples" : samples}], 
+    "channels" : [{"name" : "singlechannel", "samples" : samples}],
     "correlations": [
         {
             "name": "corr",
@@ -37,13 +37,13 @@ def test_singlesample():
             "corr": [[1., 1.], [1., 1.]],
         }
     ]}
-    
+
     new_spec = pyhfcorr.decorrelate(spec)
-    
+
     pytest.warns(UserWarning, pyhfcorr.decorrelate, spec)
-    
+
     new_model = pyhf.Model(new_spec)
-    
-    
+
+
     auxdata = new_model.config.auxdata
     assert pytest.approx(auxdata[:10], 1e-5) == list((hist2 / (hist1+hist2)) ** 2)

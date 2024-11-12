@@ -30,12 +30,12 @@ def test_singlesample():
                     }
                 }
             ],
-            
+
         },
     ]
 
     spec = {
-    "channels" : [{"name" : "singlechannel", "samples" : samples}], 
+    "channels" : [{"name" : "singlechannel", "samples" : samples}],
     "correlations": [
         {
             "name": "corr",
@@ -43,24 +43,24 @@ def test_singlesample():
             "corr": [[1., 1.], [1., 1.]],
         }
     ]}
-    
+
     new_spec = pyhfcorr.decorrelate(spec)
-    
+
     pytest.warns(UserWarning, pyhfcorr.decorrelate, spec)
-    
+
     new_model = pyhf.Model(new_spec)
-    
+
     initial_parameters = new_model.config.suggested_init()
-    
+
     initial_parameters[0] = -1.
     assert pytest.approx(new_model.expected_data(initial_parameters, include_auxdata=False), 1e-5) == hist2-hist1-hist2
-    
+
     initial_parameters[0] = 0.
     assert pytest.approx(new_model.expected_data(initial_parameters, include_auxdata=False), 1e-5) == hist2
-    
+
     initial_parameters[0] = 1.
     assert pytest.approx(new_model.expected_data(initial_parameters, include_auxdata=False), 1e-5) == hist2+hist1+hist2
-    
+
 def test_doublesample():
     samples = [
         {
@@ -85,8 +85,8 @@ def test_doublesample():
                     }
                 }
             ],
-            
-        },    
+
+        },
         {
             "name": "sample2",
             "data": list(hist2),
@@ -100,13 +100,13 @@ def test_doublesample():
                     }
                 }
             ],
-            
+
         },
-        
+
     ]
-    
+
     spec = {
-        "channels" : [{"name" : "singlechannel", "samples" : samples}], 
+        "channels" : [{"name" : "singlechannel", "samples" : samples}],
         "correlations": [
             {
                 "name": "corr",
@@ -115,26 +115,25 @@ def test_doublesample():
             }
         ]}
 
-    
+
     new_spec = pyhfcorr.decorrelate(spec)
-    
+
     pytest.warns(UserWarning, pyhfcorr.decorrelate, spec)
-    
+
     new_model = pyhf.Model(new_spec)
-    
+
     initial_parameters = new_model.config.suggested_init()
-    
+
     initial_parameters[0] = -1.
     expected_data = new_model.expected_data(initial_parameters, include_auxdata=False)
     assert pytest.approx(expected_data, 1e-5) == hist1 - hist1 - hist2 + hist2 - hist1
-    
+
     initial_parameters[0] = 0.
     expected_data = new_model.expected_data(initial_parameters, include_auxdata=False)
     print(expected_data)
     assert pytest.approx(expected_data, 1e-5) == hist1 + hist2
-    
+
     initial_parameters[0] = 1.
     expected_data = new_model.expected_data(initial_parameters, include_auxdata=False)
     print(expected_data)
     assert pytest.approx(expected_data, 1e-5) == hist1 + hist1 + hist2 + hist2 + hist1
-    

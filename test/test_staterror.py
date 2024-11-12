@@ -24,12 +24,12 @@ def test_singlesample():
                     "data": list(hist2)
                 }
             ],
-            
+
         },
     ]
 
     spec = {
-    "channels" : [{"name" : "singlechannel", "samples" : samples}], 
+    "channels" : [{"name" : "singlechannel", "samples" : samples}],
     "correlations": [
         {
             "name": "corr",
@@ -37,14 +37,14 @@ def test_singlesample():
             "corr": [[1., 1.], [1., 1.]],
         }
     ]}
-    
+
     new_spec = pyhfcorr.decorrelate(spec)
     new_model = pyhf.Model(new_spec)
-    
+
     width = new_model.config.param_set("corr[0]").width()
-    
+
     assert pytest.approx(width, 1e-5) == list(np.sqrt(hist1**2 + hist2**2))/(hist2)
-    
+
 def test_doublesample():
 
     samples = [
@@ -74,7 +74,7 @@ def test_doublesample():
     ]
 
     spec = {
-    "channels" : [{"name" : "singlechannel", "samples" : samples}], 
+    "channels" : [{"name" : "singlechannel", "samples" : samples}],
     "correlations": [
         {
             "name": "corr",
@@ -84,11 +84,10 @@ def test_doublesample():
     ]}
 
     new_spec = pyhfcorr.decorrelate(spec)
-    
+
     pytest.warns(UserWarning, pyhfcorr.decorrelate, spec)
-    
+
     new_model = pyhf.Model(new_spec)
-    
+
     width = new_model.config.param_set("corr[0]").width()
     assert pytest.approx(width, 1e-5) == list(np.sqrt(hist1**2 + hist2**2)/(hist1 + hist2))
-    
