@@ -30,6 +30,7 @@ dependencies = [
     "matplotlib",
     "numpy",
     "ipykernel",
+    "pre-commit",
 ]
 
 classifiers = [
