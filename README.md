@@ -28,6 +28,12 @@ By pre-processing the model specification, we obtain a new specification, which 
 new_spec = pyhfcorr.decorrelate.decorrelate(spec)
 ```
 
+## Installation
+
+The package is easily installed with
+
+`pip install pyhfcorr`
+
 ## Singular value decomposition
 
 We can decompose a correlation matrix $C$ as
