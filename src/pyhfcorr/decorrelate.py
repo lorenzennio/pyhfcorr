@@ -6,11 +6,11 @@ from pyhfcorr import modifiers
 warnings.simplefilter("always", UserWarning)
 
 def svd(corr, return_rot=False):
-    """Singular value decomposition, moving to a space where the covariance matrix is diagonal
+    """Singular value decomposition, moving to a space where the correlation matrix is diagonal
     https://www.cs.cmu.edu/~elaw/papers/svd.pdf
 
     Args:
-        cov (array): Correlation matrix
+        corr (array): Correlation matrix
 
     Returns:
         array: matrix of column wise error vectors (eigenvectors * sqrt(eigenvalues); sqrt(eigenvalues) = std)
